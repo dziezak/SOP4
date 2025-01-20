@@ -20,7 +20,6 @@ typedef struct{
     int value;
 } thread_data_t;
 
-// Funkcja wątku obsługującego sygnały
 void *signal_handler_thread(void *arg) {
     thread_data_t *data = (thread_data_t *)arg;
     sigset_t *set = data->set;
@@ -45,6 +44,11 @@ void *signal_handler_thread(void *arg) {
 void *thread_func(void* arg){
     long thread_id = (long)arg;
     int index = thread_id % ARRAY_SIZE;
+
+    srand(time(NULL) + thread_id);
+    int increment = rand() % 10 + 1;
+    index = (index + increment)%ARRAY_SIZE;
+
     pthread_mutex_lock(&mutex);
     array[index]++;
     counter++;
@@ -62,8 +66,10 @@ void *waiting_thread_func(void *arg){
     ts.tv_sec += WAIT_TIMEOUT_SECONDS;
 
     printf("Thread waiting for counter to exceed 50...\n");
+    long thread_id = (long)arg;
+    int index = thread_id % ARRAY_SIZE;
 
-    while(counter <= 10){
+    while(array[index] < 50){
         int ret = pthread_cond_timedwait(&cond, &mutex, &ts);
         if(ret == ETIMEDOUT){
             printf("Thread timed out waiting for the counter to exceed 10.\n");
@@ -73,6 +79,7 @@ void *waiting_thread_func(void *arg){
     }
 
     printf("Thread detected counter exceeding 10.\n");
+    //kill(getpid(), SIGINT);
     pthread_mutex_unlock(&mutex);
     return NULL;
 }
