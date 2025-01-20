@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-#define ITERATIONS 10000000
+#define ITERATIONS 1000
 
 sem_t sem;
 
@@ -23,6 +23,7 @@ void *producer(void *arg) {
     for (int i = 0; i < ITERATIONS; ++i) {
         lock();
         (*counter)++;
+        printf("counter = %d\n", *counter);
         unlock();
     }
 
@@ -35,6 +36,7 @@ void *consumer(void *arg) {
     for (int i = 0; i < ITERATIONS; ++i) {
         lock();
         (*counter)--;
+        printf("counter = %d\n", *counter);
         unlock();
     }
 

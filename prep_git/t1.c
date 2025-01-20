@@ -31,7 +31,7 @@ void *waiter(void *arg) {
 
 int main() {
     sem_t sem;
-    sem_init(&sem, 0, 5);
+    sem_init(&sem, 0, 1);
 
     printf("Creating poster\n");
 

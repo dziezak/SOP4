@@ -6,7 +6,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-#define ITERATIONS 10000000
+#define ITERATIONS 1000
 
 typedef struct context {
     int *counter;
