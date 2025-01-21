@@ -1,4 +1,4 @@
-#define _XOPEN_SOURCE 700
+//#define _XOPEN_SOURCE 700
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -39,8 +39,7 @@ void *signal_handler_thread(void *arg) {
 }
 
 void *thread_func(void* arg){
-    //pid_t pid = getpid();
-    long thread_id = (long)arg;
+    long thread_id = *(int*)arg;
     int index = thread_id % ARRAY_SIZE;
     pthread_mutex_lock(&mutex);
     array[index]++;
@@ -74,7 +73,7 @@ int main() {
     pthread_create(&sig_thread, NULL, signal_handler_thread, (void *)&data);
 
     for(int i=0; i<NUM_THREADS; i++)
-        pthread_create(&threads[i], NULL, thread_func, (void*)i);
+        pthread_create(&threads[i], NULL, thread_func, &i);
 
     for(int i=0; i<NUM_THREADS; i++)
         pthread_join(threads[i], NULL);

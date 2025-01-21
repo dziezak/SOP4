@@ -40,10 +40,10 @@ void* producer(void *arg) {
         ctx->in = (ctx->in + 1) % BUFFER_SIZE;
         ctx->size++;
 
-      pthread_cond_signal(&ctx->nonempty);
-      pthread_mutex_unlock(&ctx->mtx);
+        pthread_cond_signal(&ctx->nonempty);
+        pthread_mutex_unlock(&ctx->mtx);
 
-      printf("produced '%d'\n", new_item);
+        printf("produced '%d'\n", new_item);
     }
 
     return NULL;

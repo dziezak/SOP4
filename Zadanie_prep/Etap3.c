@@ -42,7 +42,7 @@ void *signal_handler_thread(void *arg) {
 }
 
 void *thread_func(void* arg){
-    long thread_id = (long)arg;
+    long thread_id = *(int*)arg;
     int index = thread_id % ARRAY_SIZE;
 
     srand(time(NULL) + thread_id);
@@ -72,14 +72,14 @@ void *waiting_thread_func(void *arg){
     while(array[index] < 50){
         int ret = pthread_cond_timedwait(&cond, &mutex, &ts);
         if(ret == ETIMEDOUT){
-            printf("Thread timed out waiting for the counter to exceed 10.\n");
+            printf("Thread timed out waiting for the counter to exceed 50.\n");
             pthread_mutex_unlock(&mutex);
             return NULL;
         }
     }
 
     printf("Thread detected counter exceeding 10.\n");
-    //kill(getpid(), SIGINT);
+    kill(getpid(), SIGINT);
     pthread_mutex_unlock(&mutex);
     return NULL;
 }
@@ -110,7 +110,7 @@ int main() {
     pthread_create(&sig_thread, NULL, signal_handler_thread, (void *)&data);
 
     for(int i=0; i<NUM_THREADS; i++)
-        pthread_create(&threads[i], NULL, thread_func, (void*)i);
+        pthread_create(&threads[i], NULL, thread_func, &i);
 
     for(int i=0; i<ARRAY_SIZE; i++)
         pthread_create(&waiting_threads[i], NULL, waiting_thread_func, NULL);

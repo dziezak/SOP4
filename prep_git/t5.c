@@ -42,7 +42,7 @@ void *consumer(void *arg) {
   }
 
   ctx->clicks--;
-//  printf("flag == 1\n");
+  //printf("flag == 1\n");
   pthread_mutex_unlock(&ctx->mtx);
 
   return NULL;

@@ -19,6 +19,7 @@ void *producer(void *arg) {
     for (int i = 0; i < ITERATIONS; ++i) {
         sem_wait(ctx->sem);
         (*ctx->counter)++;
+        printf("counter = %d\n", *ctx->counter);
         sem_post(ctx->sem);
     }
 
@@ -31,6 +32,7 @@ void *consumer(void *arg) {
     for (int i = 0; i < ITERATIONS; ++i) {
         sem_wait(ctx->sem);
         (*ctx->counter)--;
+        printf("counter = %d\n", *ctx->counter);
         sem_post(ctx->sem);
     }
 
